@@ -5,28 +5,28 @@ namespace backend\controllers;
 use Yii;
 use backend\models\UserBackend;
 use backend\models\UserBackendSearch;
-use yii\web\Controller;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * UserBackendController implements the CRUD actions for UserBackend model.
  */
-class UserBackendController extends Controller
+class UserBackendController extends WonderController
 {
     /**
      * @inheritdoc
      */
     public function behaviors()
     {
-        return [
+        return ArrayHelper::merge(parent::behaviors(),[
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
                 ],
             ],
-        ];
+        ]);
     }
 
     /**
@@ -120,5 +120,25 @@ class UserBackendController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     *  create new user
+     */
+    public function actionSignup ()
+    {
+        $model = new \backend\models\SignupForm();
+
+        // 如果是post提交且有对提交的数据校验成功（我们在SignupForm的signup方法进行了实现）
+        // $model->load() 方法，实质是把post过来的数据赋值给model
+        // $model->signup() 方法, 是我们要实现的具体的添加用户操作
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            return $this->redirect(['index']);
+        }
+
+        // 渲染添加新用户的表单
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
     }
 }

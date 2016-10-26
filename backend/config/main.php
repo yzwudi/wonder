@@ -10,20 +10,20 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'gii'],
     'modules' => [
-        'gii'   => [
+        /*'gii'   => [
             'class' =>  'yii\gii\Module',
-            'allowedIPs' => ['*']]
+            'allowedIPs' => ['*']]*/
     ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'backend\models\UserBackend',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            //'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
