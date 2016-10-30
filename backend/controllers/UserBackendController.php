@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\UserBackend;
 use backend\models\UserBackendSearch;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -19,14 +20,30 @@ class UserBackendController extends WonderController
      */
     public function behaviors()
     {
-        return ArrayHelper::merge(parent::behaviors(),[
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        // 当前rule将会针对这里设置的actions起作用，如果actions不设置，默认就是当前控制器的所有操作
+                        'actions' => ['index', 'view'],
+                        // 设置actions的操作是允许访问还是拒绝访问
+                        'allow' => true,
+                        // @ 当前规则针对认证过的用户; ? 未登录用户可访问
+                        'roles' => ['@'],
+                    ],
+
+                    [
+                        'actions' => ['signup', 'create', 'delete', 'update'],
+                        // 自定义一个规则，返回true表示满足该规则，可以访问，false表示不满足规则，也就不可以访问actions里面的操作啦
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->id == 1 ? true : false;
+                        },
+                        'allow' => true,
+                    ],
                 ],
             ],
-        ]);
+        ];
     }
 
     /**

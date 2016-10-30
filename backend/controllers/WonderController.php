@@ -13,21 +13,19 @@ use yii\filters\AccessControl;
 
 class WonderController extends yii\web\Controller {
 
-    public function behaviors() {
+    public function behaviors(){
         return [
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'allow'   => true,
-                        'actions' => ['info',],
-                        'roles'   => ['?']
+                        'allow' => true,
+                        'roles' => ['@'],
                     ],
                     [
-                        'allow'   => true,
-                        'roles'   => ['@']
+                        'allow' => false,
+                        'roles' => ['?'],
                     ],
-
                 ],
             ],
         ];
