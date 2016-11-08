@@ -136,7 +136,7 @@ class SiteController extends WonderController
             $fundInfo->establish_gr = $info[15];
             $fundInfo->self_define = $info[18];
             $fundInfo->poundage = $info[20];
-            $fundInfo->create_time = date('Y-m-d H:i:s',time());
+            $fundInfo->create_time = date('Ymd',time());
             if(!$fundInfo->save()){
                 $tran->rollBack();
                 echo '更新失败:';echo $fundInfo->getErrors();exit;

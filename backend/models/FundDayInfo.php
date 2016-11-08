@@ -45,10 +45,10 @@ class FundDayInfo extends \yii\db\ActiveRecord
     {
         return [
             [['fund_id', 'name', 'name_en', 'date'], 'required'],
-            [['date', 'create_time'], 'safe'],
+            [['date'], 'safe'],
             [['unit_net_value', 'total_net_value', 'day_gr', 'week_gr', 'month_gr', 'three_month_gr', 'six_month_gr', 'year_gr', 'two_year_gr', 'three_year_gr', 'this_year_gr', 'establish_gr', 'self_define'], 'number'],
             [['name'], 'string', 'max' => 64],
-            [['name_en', 'poundage', 'fund_id'], 'string', 'max' => 32],
+            [['name_en', 'poundage', 'fund_id', 'create_time'], 'string', 'max' => 32],
         ];
     }
 
