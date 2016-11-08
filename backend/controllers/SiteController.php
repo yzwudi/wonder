@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use backend\models\FundDayInfo;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -60,7 +61,54 @@ class SiteController extends WonderController
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $url = 'http://fund.eastmoney.com/data/rankhandler.aspx?op=ph&dt=kf&ft=all&rs=&gs=0&sc=3nzf&st=desc&sd='.date('Y-m-d',strtotime('-365 days')).'&ed='.date('Y-m-d',time()).'&qdii=&tabSubtype=,,,,,&pi=1&pn=300&dx=1&v=0.9181909634243504';
+
+        $fileName = 'uploads/'.date('Ymd', time()).'.txt';
+        if(file_exists($fileName)){
+            $str = file_get_contents($fileName);
+        }else{
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $output = curl_exec($ch);
+            curl_close($ch);
+            $str = str_replace('var rankData = {datas', '{"data"', $output);
+            $str = preg_replace('/,allRecords.+/', '}', $str);
+            $file = @fopen($fileName, 'w');
+            fwrite($file, $str);
+            fclose($file);
+        }
+        $tran = \Yii::$app->db->beginTransaction();
+        foreach(json_decode($str, true)['data'] as $key=>$val){
+            $fundInfo = new FundDayInfo();
+            $info = explode(',', $val);
+            $fundInfo->fund_id = $info[0];
+            $fundInfo->name = $info[1];
+            $fundInfo->name_en = $info[2];
+            $fundInfo->date = $info[3];
+            $fundInfo->unit_net_value = $info[4];
+            $fundInfo->total_net_value = $info[5];
+            $fundInfo->day_gr = $info[6];
+            $fundInfo->week_gr = $info[7];
+            $fundInfo->month_gr = $info[8];
+            $fundInfo->three_month_gr = $info[9];
+            $fundInfo->six_month_gr = $info[10];
+            $fundInfo->year_gr = $info[11];
+            $fundInfo->two_year_gr = $info[12];
+            $fundInfo->three_year_gr = $info[13];
+            $fundInfo->this_year_gr = $info[14];
+            $fundInfo->establish_gr = $info[15];
+            $fundInfo->self_define = $info[18];
+            $fundInfo->poundage = $info[20];
+            $fundInfo->create_time = date('Y-m-d',time());
+            if(!$fundInfo->save()){
+                $tran->rollBack();
+            };
+        }
+        $tran->commit();
+
+        var_dump(json_decode($str, true)['data'][0]);exit;
+        echo $str;
     }
 
     /**
