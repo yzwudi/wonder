@@ -27,9 +27,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'fund_id',
             'name',
             'name_en',
+            'week_gr',
             'month_gr',
-            'three_year_gr',
+            'three_month_gr',
+            'six_month_gr',
+            'year_gr',
             'this_year_gr',
+            'three_year_gr',
+            'date',
+
 
             // 'unit_net_value',
             // 'total_net_value',

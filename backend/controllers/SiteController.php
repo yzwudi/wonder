@@ -100,9 +100,11 @@ class SiteController extends WonderController
                 $fundInfo->create_time = date('Y-m-d H:i:s',time());
                 if(!$fundInfo->save()){
                     $tran->rollBack();
+                    echo '更新失败:';echo $fundInfo->getErrors();exit;
                 };
             }
             $tran->commit();
+            echo '更新成功';
         }
 
         return $this->render('index');
