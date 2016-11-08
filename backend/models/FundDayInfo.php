@@ -59,10 +59,10 @@ class FundDayInfo extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'fund_id' => 'Fund ID',
-            'name' => 'Name',
-            'name_en' => 'Name En',
-            'date' => 'Date',
+            'fund_id' => '基金号',
+            'name' => '名称',
+            'name_en' => '英文缩写',
+            'date' => '基金统计时间',
             'unit_net_value' => 'Unit Net Value',
             'total_net_value' => 'Total Net Value',
             'day_gr' => 'Day Gr',
