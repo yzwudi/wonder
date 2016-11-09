@@ -169,9 +169,9 @@ class SiteController extends WonderController
             $resultData = array_slice($resultData, 0, 30);
             $resultData = static::multi_array_sort($resultData, 'month_gr', 'desc');
             $resultData = array_slice($resultData, 0, 20);
-            $infos = [];
+            $information = [];
             foreach($resultData as $key=>$info){
-                $infos[] = [$info['fund_id'],$info['name'],$info['name_en'],
+                $information[] = [$info['fund_id'],$info['name'],$info['name_en'],
                     $info['date'],$info['unit_net_value'],$info['total_net_value'],
                     $info['day_gr'],$info['week_gr'],$info['month_gr'],
                     $info['three_month_gr'],$info['six_month_gr'],$info['year_gr'],
