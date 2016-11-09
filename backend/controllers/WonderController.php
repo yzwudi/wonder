@@ -31,4 +31,29 @@ class WonderController extends yii\web\Controller {
         ];
     }
 
+    /**
+     * 数组排序
+     * @param array $multi_array 需要排序的数组
+     * @param string $sort_key 按照哪个字段排序
+     * @param string $sort 正序/倒序
+     * @return boolean|array
+     */
+    public static function multi_array_sort($multi_array, $sort_key, $sort = 'asc')
+    {
+        if (!empty($multi_array) && is_array($multi_array)) {
+            foreach ($multi_array as $row_array) {
+                if (is_array($row_array)) {
+                    $key_array[] = $row_array[$sort_key];
+                } else {
+                    return [];
+                }
+            }
+        } else {
+            return [];
+        }
+        $sort = $sort == 'asc' ? SORT_ASC : SORT_DESC;
+        array_multisort($key_array, $sort, $multi_array);
+        return $multi_array;
+    }
+
 }

@@ -4,20 +4,18 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\FundayInfoSearch */
+/* @var $searchModel backend\models\FundBestInfoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '三年基金排名';
+$this->title = '基金综合排名';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="fund-day-info-index">
+<div class="fund-best-info-index">
 
-    <h2><?= Html::encode('截止'.date('Y-m-d',time()).'日 3年排名前300基金') ?></h2>
+    <h2><?= Html::encode('截止'.date('Y-m-d',time()).'日 综合排名前20基金') ?></h2>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <!--<p>
-        <?/*= Html::a('Create Fund Day Info', ['create'], ['class' => 'btn btn-success']) */?>
-    </p>-->
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
@@ -35,8 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'this_year_gr',
             'three_year_gr',
             'date',
-
-
             // 'unit_net_value',
             // 'total_net_value',
             // 'day_gr',

@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use backend\models\FundBestInfo;
 use backend\models\FundDayInfo;
 use Yii;
 use yii\web\Controller;
@@ -27,7 +28,7 @@ class SiteController extends WonderController
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => [],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -101,6 +102,13 @@ class SiteController extends WonderController
         return $this->goHome();
     }
 
+    /**
+     * 获取基金信息
+     *
+     * @param $fileName
+     * @return string
+     * @throws \yii\db\Exception
+     */
     private function _saveFundDayInfo($fileName){
         $url = 'http://fund.eastmoney.com/data/rankhandler.aspx?op=ph&dt=kf&ft=all&rs=&gs=0&sc=3nzf&st=desc&sd='.date('Y-m-d',strtotime('-365 days')).'&ed='.date('Y-m-d',time()).'&qdii=&tabSubtype=,,,,,&pi=1&pn=300&dx=1&v=0.9181909634243504';
         $ch = curl_init();
@@ -145,5 +153,55 @@ class SiteController extends WonderController
         $tran->commit();
         unset($str);
         return $this->render('index');
+    }
+
+    public function actionGetBest()
+    {
+        $date = FundDayInfo::find()->select(['MAX(create_time)'])->scalar();
+        $isExist = FundBestInfo::find()->select(['create_time'])->where(['create_time'=>$date])->asArray()->all();
+        if(empty($isExist)){
+            $data = FundDayInfo::find()->where(['create_time'=>$date])->asArray()->all();
+            $resultData = static::multi_array_sort($data, 'year_gr', 'desc');
+            $resultData = array_slice($resultData, 0, 100);
+            $resultData = static::multi_array_sort($resultData, 'six_month_gr', 'desc');
+            $resultData = array_slice($resultData, 0, 50);
+            $resultData = static::multi_array_sort($resultData, 'three_month_gr', 'desc');
+            $resultData = array_slice($resultData, 0, 30);
+            $resultData = static::multi_array_sort($resultData, 'month_gr', 'desc');
+            $resultData = array_slice($resultData, 0, 20);
+            $infos = [];
+            foreach($resultData as $key=>$info){
+                $infos[] = [$info['fund_id'],$info['name'],$info['name_en'],
+                    $info['date'],$info['unit_net_value'],$info['total_net_value'],
+                    $info['day_gr'],$info['week_gr'],$info['month_gr'],
+                    $info['three_month_gr'],$info['six_month_gr'],$info['year_gr'],
+                    $info['two_year_gr'],$info['three_year_gr'],$info['this_year_gr'],
+                    $info['establish_gr'],$info['self_define'],$info['poundage'],
+                    $info['create_time'],
+                ];
+            }
+            $params = [
+                'fund_id','name','name_en',
+                'date','unit_net_value','total_net_value',
+                'day_gr','week_gr','month_gr',
+                'three_month_gr','six_month_gr','year_gr',
+                'two_year_gr','three_year_gr','this_year_gr',
+                'establish_gr','self_define','poundage',
+                'create_time'
+
+            ];
+            $tran = Yii::$app->db->beginTransaction();
+
+            $connection = Yii::$app->db;
+            $row = $connection->createCommand()->batchinsert(FundBestInfo::tableName(),$params,$infos)->execute();
+
+            if($row <= 0){
+                $tran->rollBack();
+                echo '添加失败';exit;
+            }
+            $tran->commit();
+        }
+
+        echo '添加成功';
     }
 }

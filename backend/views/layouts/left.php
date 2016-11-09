@@ -26,80 +26,32 @@
         </form>
         <!-- /.search form -->
 
-        <?= /*dmstr\widgets\Menu::widget(
-            [
-                'options' => ['class' => 'sidebar-menu'],
-                'items' => [
-                    ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
-                    ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
-                    ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],
-                    ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
-                    [
-                        'label' => 'Same tools',
-                        'icon' => 'fa fa-share',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug'],],
-                            [
-                                'label' => 'Level One',
-                                'icon' => 'fa fa-circle-o',
-                                'url' => '#',
-                                'items' => [
-                                    ['label' => 'Level Two', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                    [
-                                        'label' => 'Level Two',
-                                        'icon' => 'fa fa-circle-o',
-                                        'url' => '#',
-                                        'items' => [
-                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ]
-        ) ;*/
-
-        \yii\bootstrap\Nav::widget(
+        <?= dmstr\widgets\Menu::widget(
             [
                 "encodeLabels" => false,
-                "options" => ["class" => "sidebar-menu"],
-                "items" => \mdm\admin\components\MenuHelper::getAssignedMenu(Yii::$app->user->id),
+                'options' => ['class' => 'sidebar-menu'],
+                'items' =>\yii\helpers\ArrayHelper::merge([['label' => '目录', 'options' => ['class' => 'header']],],
+                    \mdm\admin\components\MenuHelper::getAssignedMenu(Yii::$app->user->id), [
+                    ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
+                    [
+                        'label' => '权限控制',
+                        //'icon' => 'fa fa-share',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => '路由', 'icon' => 'fa fa-file-code-o', 'url' => ['/admin/route'],],
+                            ['label' => '权限', 'icon' => 'fa fa-dashboard', 'url' => ['/admin/permission'],],
+                            ['label' => '角色', 'icon' => 'fa fa-file-code-o', 'url' => ['/admin/role'],],
+                            ['label' => '分配', 'icon' => 'fa fa-dashboard', 'url' => ['/admin/assignment'],],
+                            ['label' => '菜单', 'icon' => 'fa fa-dashboard', 'url' => ['/admin/menu'],],
+                        ],
+                    ],
+                ])
+
             ]
-        );
+        ) ;
+
+
         ?>
-        <ul class="sidebar-menu">
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-gears"></i> <span>权限控制</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="treeview">
-                        <a href="/admin">管理员</a>
-                        <ul class="treeview-menu">
-                            <li><a href="/user"><i class="fa fa-circle-o"></i> 后台用户</a></li>
-                            <li class="treeview">
-                                <a href="/admin/role">
-                                    <i class="fa fa-circle-o"></i> 权限 <i class="fa fa-angle-left pull-right"></i>
-                                </a>
-                                <ul class="treeview-menu">
-                                    <li><a href="/admin/route"><i class="fa fa-circle-o"></i> 路由</a></li>
-                                    <li><a href="/admin/permission"><i class="fa fa-circle-o"></i> 权限</a></li>
-                                    <li><a href="/admin/role"><i class="fa fa-circle-o"></i> 角色</a></li>
-                                    <li><a href="/admin/assignment"><i class="fa fa-circle-o"></i> 分配</a></li>
-                                    <li><a href="/admin/menu"><i class="fa fa-circle-o"></i> 菜单</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </ul>
 
     </section>
 
