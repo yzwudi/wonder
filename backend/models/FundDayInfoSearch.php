@@ -10,7 +10,7 @@ use backend\models\FundDayInfo;
 /**
  * FundayInfoSearch represents the model behind the search form about `backend\models\FundDayInfo`.
  */
-class FundayInfoSearch extends FundDayInfo
+class FundDayInfoSearch extends FundDayInfo
 {
     /**
      * @inheritdoc

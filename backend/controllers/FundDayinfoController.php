@@ -4,7 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use backend\models\FundDayInfo;
-use backend\models\FundayInfoSearch;
+use backend\models\FundDayInfoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -35,8 +35,16 @@ class FundDayinfoController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new FundayInfoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new FundDayInfoSearch();
+        $searchCondition = Yii::$app->request->queryParams;
+        if(isset($searchCondition['FundDayInfoSearch'])){
+            $searchCondition['FundDayInfoSearch']['create_time'] = FundDayInfo::find()->select(['MAX(create_time)'])->scalar();
+        }else{
+            $searchCondition = ['FundDayInfoSearch'=>[
+                'create_time' => FundDayInfo::find()->select(['MAX(create_time)'])->scalar(),
+            ]];
+        }
+        $dataProvider = $searchModel->search($searchCondition);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

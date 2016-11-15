@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\FundayInfoSearch */
+/* @var $searchModel backend\models\FundDayInfoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = '三年基金排名';

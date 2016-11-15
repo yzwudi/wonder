@@ -36,7 +36,17 @@ class FundBestinfoController extends Controller
     public function actionIndex()
     {
         $searchModel = new FundBestInfoSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchCondition = Yii::$app->request->queryParams;
+        //var_dump($searchCondition);exit;
+        if(isset($searchCondition['FundBestInfoSearch'])){
+            $searchCondition['FundBestInfoSearch']['create_time'] = FundBestInfo::find()->select(['MAX(create_time)'])->scalar();
+        }else{
+            $searchCondition = ['FundBestInfoSearch'=>[
+                'create_time' => FundBestInfo::find()->select(['MAX(create_time)'])->scalar(),
+            ]];
+        }
+        //var_dump($searchCondition);exit;
+        $dataProvider = $searchModel->search($searchCondition);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

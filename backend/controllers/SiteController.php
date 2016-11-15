@@ -63,7 +63,7 @@ class SiteController extends WonderController
     public function actionIndex()
     {
         $fileName = 'uploads/'.date('Ymd', time()).'.txt';
-        if(!file_exists($fileName) && date('w') == 2){
+        if(!file_exists($fileName) && date('w') == 0){
             $this->_saveFundDayInfo($fileName);
         }
         return $this->render('index');
@@ -150,12 +150,18 @@ class SiteController extends WonderController
                 echo '更新失败:';echo $fundInfo->getErrors();exit;
             };
         }
+        $this->_getBest();
         $tran->commit();
         unset($str);
         return $this->render('index');
     }
 
-    public function actionGetBest()
+    /**
+     * 获取最佳基金top20
+     *
+     * @throws \yii\db\Exception
+     */
+    public function _getBest()
     {
         $date = FundDayInfo::find()->select(['MAX(create_time)'])->scalar();
         $isExist = FundBestInfo::find()->select(['create_time'])->where(['create_time'=>$date])->asArray()->all();
@@ -193,7 +199,7 @@ class SiteController extends WonderController
             $tran = Yii::$app->db->beginTransaction();
 
             $connection = Yii::$app->db;
-            $row = $connection->createCommand()->batchinsert(FundBestInfo::tableName(),$params,$infos)->execute();
+            $row = $connection->createCommand()->batchinsert(FundBestInfo::tableName(),$params,$information)->execute();
 
             if($row <= 0){
                 $tran->rollBack();
