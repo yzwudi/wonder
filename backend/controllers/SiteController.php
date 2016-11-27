@@ -167,7 +167,9 @@ class SiteController extends WonderController
         $isExist = FundBestInfo::find()->select(['create_time'])->where(['create_time'=>$date])->asArray()->all();
         if(empty($isExist)){
             $data = FundDayInfo::find()->where(['create_time'=>$date])->asArray()->all();
-            $resultData = static::multi_array_sort($data, 'year_gr', 'desc');
+            $resultData = static::multi_array_sort($data, 'two_year_gr', 'desc');
+            $resultData = array_slice($resultData, 0, 150);
+            $resultData = static::multi_array_sort($resultData, 'year_gr', 'desc');
             $resultData = array_slice($resultData, 0, 100);
             $resultData = static::multi_array_sort($resultData, 'six_month_gr', 'desc');
             $resultData = array_slice($resultData, 0, 50);
