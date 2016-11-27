@@ -2,14 +2,10 @@
 /**
  * Created by PhpStorm.
  * User: admin
- * Date: 2016/10/26
+ * Date: 2016/11/27
  * Time: 20:37
  */
 $this->title = '添加新用户';
-if(!isset($_SESSION['__id']) || !$_SESSION['__id']){
-    $this->title = '注册新用户';
-}
-
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-signup">

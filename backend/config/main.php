@@ -69,7 +69,7 @@ return [
         'assetManager' => [
             'bundles' => [
                 'dmstr\web\AdminLteAsset' => [
-                    'skin' => 'skin-blue',
+                    'skin' => 'skin-green',
                 ],
             ],
         ],
@@ -87,7 +87,8 @@ return [
         'allowActions' => [
             //这里是允许访问的action
             //'*'
-            //controller/action
+            'site/register',
+            'site/logout'
         ]
     ],
     'params' => $params,

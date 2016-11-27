@@ -77,7 +77,7 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return null;
         }
-
+        $tran = \Yii::$app->db->beginTransaction();
         // 实现数据入库操作
         $user = new UserBackend();
         $user->username = $this->username;
@@ -93,6 +93,19 @@ class SignupForm extends Model
 
         // save(false)的意思是：不调用UserBackend的rules再做校验并实现数据入库操作
         // 这里这个false如果不加，save底层会调用UserBackend的rules方法再对数据进行一次校验，因为我们上面已经调用Signup的rules校验过了，这里就没必要在用UserBackend的rules校验了
-        return $user->save(false);
+        if(!$user->save(false)){
+            $tran->rollback();
+            echo '注册失败';
+            exit;
+        }
+        $auth = new AuthAssignment(['item_name'=>'普通用户', 'user_id'=>$user->id]);
+        if(!$auth->save(false)){
+            $tran->rollback();
+            echo '注册失败';
+            exit;
+        }
+        $_SESSION['__id'] = $user->id;
+        $tran->commit();
+        return true;
     }
 }
