@@ -24,7 +24,7 @@ class SiteController extends WonderController
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error', 'register'],
+                        'actions' => ['login', 'error', 'register', 'captcha'],
                         'allow' => true,
                         'roles' => ['?']
                     ],
@@ -59,6 +59,12 @@ class SiteController extends WonderController
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'maxLength' => 4,
+                'minLength' => 4,
+                //'fixedVerifyCode' => substr(md5(time()),11,4), //每次都刷新验证码
+            ]
         ];
     }
 

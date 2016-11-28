@@ -18,7 +18,16 @@ $fieldOptions2 = [
     'inputTemplate' => "{input}<span class='glyphicon glyphicon-lock form-control-feedback'></span>"
 ];
 ?>
-
+<style type="text/css">
+    .txt {
+        height: 34px;
+        width: 60%;
+        border: 1px solid #d4d4d4;
+        margin: 0 5px 10px 0;
+        padding: 0 0 0px 10px;
+        font-size: 14px;
+    }
+</style>
 <div class="login-box">
     <div class="login-logo">
         <a href="#"><b>Wonder</b></a>
@@ -39,6 +48,19 @@ $fieldOptions2 = [
             ->label(false)
             ->passwordInput(['placeholder' => $model->getAttributeLabel('密码')]) ?>
 
+        <?= $form->field($model,'verifyCode',[
+            'wrapperOptions' => ['class' => 'verifyCodeDiv'],
+            'labelOptions' => ['label' => '验证码', 'style' => "display:none"],
+            "errorOptions" => ["class" => 'error']
+        ])->widget(yii\captcha\Captcha::className(),
+                [
+                    'captchaAction'=>'site/captcha',
+                    'template' => '{input}{image}<br>',
+                    'options' => [
+                        "placeholder" => "请输入验证码",
+                        "class" => "txt",
+                    ]
+                ]);?>
         <div class="row">
             <div class="col-xs-8">
                 <?= $form->field($model, 'rememberMe')->checkbox() ?>

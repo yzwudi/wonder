@@ -88,7 +88,8 @@ return [
             //这里是允许访问的action
             //'*'
             'site/register',
-            'site/logout'
+            'site/logout',
+            'site/captcha'
         ]
     ],
     'params' => $params,
