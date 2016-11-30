@@ -83,7 +83,7 @@ class SiteController extends WonderController
     }
 
     public function actionRegister(){
-        $this->layout = false;
+        $this->layout = 'main-login';
         $model = new \backend\models\SignupForm();
 
         // 如果是post提交且有对提交的数据校验成功（我们在SignupForm的signup方法进行了实现）

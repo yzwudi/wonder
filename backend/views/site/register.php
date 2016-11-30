@@ -1,31 +1,63 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: admin
- * Date: 2016/11/27
- * Time: 20:37
- */
-$this->title = '添加新用户';
-$this->params['breadcrumbs'][] = $this->title;
+use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
+
+/* @var $this yii\web\View */
+/* @var $form yii\bootstrap\ActiveForm */
+/* @var $model \common\models\LoginForm */
+
+$this->title = '登录';
+
+$fieldOptions1 = [
+    'options' => ['class' => 'form-group has-feedback'],
+    'inputTemplate' => "{input}<span class='glyphicon glyphicon-envelope form-control-feedback'></span>"
+];
+
+$fieldOptions2 = [
+    'options' => ['class' => 'form-group has-feedback'],
+    'inputTemplate' => "{input}<span class='glyphicon glyphicon-lock form-control-feedback'></span>"
+];
+
+$fieldOptions3 = [
+    'options' => ['class' => 'form-group has-feedback'],
+    'inputTemplate' => "{input}<span class='glyphicon glyphicon-user form-control-feedback'></span>"
+];
 ?>
-<div class="site-signup">
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = \yii\bootstrap\ActiveForm::begin(['id' => 'form-signup']); ?>
 
-            <?= $form->field($model, 'username')->label('登陆名')->textInput(['autofocus' => true]) ?>
-
-            <?= $form->field($model, 'email')->label('邮箱') ?>
-
-            <?= $form->field($model, 'password')->label('密码')->passwordInput() ?>
-
-            <?= $form->field($model, 'password_compare')->label('确认密码')->passwordInput() ?>
-
-            <div class="form-group">
-                <?= \yii\bootstrap\Html::submitButton('添加', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
-            </div>
-
-            <?php \yii\bootstrap\ActiveForm::end(); ?>
-        </div>
+<div class="login-box">
+    <div class="login-logo">
+        <a href="#"><b>Wonder</b></a>
     </div>
-</div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+        <h4 class="login-box-msg">开启探索之旅</h4>
+
+        <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
+
+        <?= $form->field($model, 'username', $fieldOptions3)
+            ->label(false)
+            ->textInput(['placeholder' => $model->getAttributeLabel('用户名')]) ?>
+
+        <?= $form->field($model, 'email', $fieldOptions1)
+            ->label(false)
+            ->textInput(['placeholder' => $model->getAttributeLabel('邮箱')]) ?>
+
+        <?= $form->field($model, 'password', $fieldOptions2)
+            ->label(false)
+            ->passwordInput(['placeholder' => $model->getAttributeLabel('密码')]) ?>
+
+        <?= $form->field($model, 'password_compare', $fieldOptions2)
+            ->label(false)
+            ->passwordInput(['placeholder' => $model->getAttributeLabel('确认密码')]) ?>
+
+        <div class="form-group">
+            <?= Html::submitButton('注册用户', ['class' => 'btn btn-primary btn-block btn-flat', 'name' => 'register-button']) ?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
+
+        <a href="/site/login" class="text-center">返回登录</a>
+
+    </div>
+    <!-- /.login-box-body -->
+</div><!-- /.login-box -->

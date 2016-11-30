@@ -27,6 +27,10 @@ $fieldOptions2 = [
         padding: 0 0 0px 10px;
         font-size: 14px;
     }
+    .error {
+        color: red;
+        font-size: 14px;
+    }
 </style>
 <div class="login-box">
     <div class="login-logo">
