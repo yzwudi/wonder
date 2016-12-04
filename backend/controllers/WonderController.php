@@ -13,6 +13,8 @@ use yii\filters\AccessControl;
 
 class WonderController extends yii\web\Controller {
 
+    public $errorMsg = '';
+
     public function behaviors(){
         return [
             'access' => [
@@ -54,6 +56,21 @@ class WonderController extends yii\web\Controller {
         $sort = $sort == 'asc' ? SORT_ASC : SORT_DESC;
         array_multisort($key_array, $sort, $multi_array);
         return $multi_array;
+    }
+
+    public static function buildError($data, $code, $meg){
+        while (is_array($meg)) {
+            $meg = array_shift($meg);
+        }
+
+        $ret = [
+            'data' => $data,
+            'code' => (int)$code,
+            'msg' => $meg,
+        ];
+        $view = YII::$app->view;
+        $view->params['errorMsg'] = $ret;
+        return $ret;
     }
 
 }

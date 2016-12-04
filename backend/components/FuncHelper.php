@@ -12,6 +12,7 @@ use Yii;
 
 class FuncHelper
 {
+    //将HTML table 转化为数组
     public static function getArrayFromHtmlTable($table){
         $table = preg_replace("'<table[^>]*?>'si","",$table);
         $table = preg_replace("'<tr[^>]*?>'si","",$table);
@@ -32,5 +33,24 @@ class FuncHelper
             $td_array[] = $td;
         }
         return $td_array;
+    }
+
+    //根据基金号获取基金名称
+    public static function getFundNameById($id){
+        $url = 'http://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx?m=1&key='.$id;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        $output = json_decode($output,true)['Datas'];
+        if(empty($output)){
+            return '';
+        }
+        foreach($output as $val){
+            if($val['_id'] == $id && $val['CATEGORYDESC'] == '基金'){
+                return $val['NAME'];
+            }
+        }
     }
 }

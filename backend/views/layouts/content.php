@@ -1,9 +1,29 @@
 <?php
 use yii\widgets\Breadcrumbs;
 use dmstr\widgets\Alert;
+$error = isset($this->params['errorMsg']) ? $this->params['errorMsg'] : '';
+$dispaly = 'none';
+$property = 'info';
+if(isset($error) && $error){
 
+    if($error['code'] = 1){
+        $property = 'error';
+    }elseif($error['code'] = 0){
+        $property = 'success';
+    }elseif($error['code'] = 2){
+        $property = 'info';
+    }
+    $dispaly = 'true';
+}
 ?>
 <div class="content-wrapper">
+    <div class="errors" style="padding-top: 5px;display:<?=$dispaly?>">
+        <div class="alert alert-<?=$property?>" >
+            <a class="close" data-dismiss="alert">×</a>
+            <strong style="font-size: 18px">操作失败! <?=isset($error['msg'])?$error['msg']:''?></strong>
+        </div>
+    </div>
+
     <section class="content-header">
         <?php if (isset($this->blocks['content-header'])) { ?>
             <h1><?= $this->blocks['content-header'] ?></h1>
