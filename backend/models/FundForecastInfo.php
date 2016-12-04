@@ -58,4 +58,18 @@ class FundForecastInfo extends \yii\db\ActiveRecord
             'info' => '提示',
         ];
     }
+
+    public static function buildSearch($searchParams){
+        $key = false;
+        $params = ['FundForecastSearch'=>[]];
+        foreach($searchParams as $key => $val){
+            if($val){
+                $params['FundForecastSearch'][$key] = $val;
+                $key = true;
+            }
+        }
+        if($key){
+            Yii::$app->request->setQueryParams($params);
+        }
+    }
 }

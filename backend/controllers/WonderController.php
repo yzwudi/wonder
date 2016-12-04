@@ -73,4 +73,11 @@ class WonderController extends yii\web\Controller {
         return $ret;
     }
 
+    public static function getParam($name, $default = null)
+    {
+        $post = Yii::$app->request->post($name);
+        $get = Yii::$app->request->get($name);
+        return isset($_POST[$name]) ? $post : (isset($_GET[$name]) ? $get : $default);
+    }
+
 }

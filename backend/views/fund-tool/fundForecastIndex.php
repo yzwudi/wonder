@@ -32,10 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?php ActiveForm::end(); ?>
 
-            <form role="form">
+            <form role="form" class="form-group">
                 <div class="form-group">
-                    <input type="text" name="searchId" class="form-control" id="searchId" placeholder="请输入基金ID" >
-                    <input type="text" name="searchName" class="form-control" id="searchName" placeholder="请输入基金名称">
+                    <input type="text" value="<?=$searchId?>" name="searchId" class="form-control" id="searchId" placeholder="请输入基金ID" autocomplete="off">
+                    <input type="text" value="<?=$searchName?>" name="searchName" class="form-control" id="searchName" placeholder="请输入基金名称" autocomplete="off">
                 </div>
                 <button type="submit" class="btn btn-primary">查询</button>
             </form>
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'max_forecast',
             'min_forecast',
             'avg_forecast',
-            // 'month',
+            'info',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

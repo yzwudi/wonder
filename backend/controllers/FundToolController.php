@@ -12,6 +12,7 @@ use backend\components\FuncHelper;
 use backend\models\FundForecastInfo;
 use backend\models\FundForecastSearch;
 use backend\models\FundTool;
+use backend\models\IndexManage;
 use Yii;
 use yii\web\NotFoundHttpException;
 
@@ -30,6 +31,9 @@ class FundToolController extends WonderController
 
     public function actionAddFund(){
         $searchModel = new FundForecastSearch();
+        $searchId = static::getParam('searchId', '');
+        $searchName= static::getParam('searchName', '');
+        FundForecastInfo::buildSearch(['fund_id'=>$searchId, 'name'=>$searchName]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $model = new FundForecastInfo();
         if ($model->load(Yii::$app->request->post())){
@@ -63,6 +67,8 @@ class FundToolController extends WonderController
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'model' => $model,
+            'searchId' => $searchId,
+            'searchName' => $searchName,
         ]);
     }
 
@@ -122,5 +128,14 @@ class FundToolController extends WonderController
         } else {
             throw new NotFoundHttpException('请求的基金不存在');
         }
+    }
+
+    public function actionCompositeIndex(){
+        $list = IndexManage::findAll(['date'=>date('Y-m-d', time())]);
+        $model = new IndexManage();
+        return $this->render('indexManageIndex', [
+            'indexList' => $list,
+            'model' => $model,
+        ]);
     }
 }
