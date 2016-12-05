@@ -27,6 +27,7 @@ class FundToolController extends Controller {
         $output = str_replace('"', '', $output);
         $output = preg_replace('/\s/',"",$output);
         $output = explode('/', trim(preg_replace('/varzsbx[0-9]+=/', '/', $output), '/'));
+        array_shift($output);
         $indexes = [];
         foreach($output as $key=>$val){
             if($key%9 == 0){
@@ -37,6 +38,7 @@ class FundToolController extends Controller {
                 $indexes[$name]['index'] = $val;
             }
         }
+
         $url = 'http://www.csindex.com.cn/sseportal/ps/zhs/hqjt/csi/show_zsgz.js';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -47,6 +49,7 @@ class FundToolController extends Controller {
         $output = str_replace('"', '', $output);
         $output = preg_replace('/\s/',"",$output);
         $output = explode('/', trim(preg_replace('/varzsgz[0-9]+=/', '/', $output), '/'));
+        array_shift($output);
         foreach($output as $key=>$val){
             if($key%9 == 0){
                 $name = $val;

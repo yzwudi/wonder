@@ -5,10 +5,35 @@
  * Date: 2016/12/4
  * Time: 21:32
  */
-
+use dosamigos\datepicker\DatePicker;
+use yii\bootstrap\ActiveForm;
 $this->title = '基金估值';
 
 ?>
+<?php
+
+$form = ActiveForm::begin(['id' => 'login-form']);
+ ?>
+<div class="form-group" style="padding-right: 80%">
+    <?= DatePicker::widget([
+        'model' => $model,
+        'attribute' => 'date',
+        'template' => '{addon}{input}',
+        'language' => 'zh-CN',
+        //'placeholder'=>'2015-12-05',
+        'clientOptions' => [
+            'autoclose' => true,
+            'format' => 'yyyy-mm-dd',
+            'date'=>'2015-12-05',
+        ]
+    ]);?>
+</div>
+<div class="form-group">
+    <?= \yii\bootstrap\Html::submitButton( '按日期查询' , ['class' => 'btn btn-primary']) ?>
+</div>
+
+<?php ActiveForm::end(); ?>
+
 <div class="index-manage-info" style="width:98%">
     <table class="table table-hover" style="font-size:15px">
         <caption><?=date('Y-m-d', time()).' 各指数详情'?></caption>
@@ -41,6 +66,7 @@ $this->title = '基金估值';
                 echo "<td>".$val['dividend_rate']."</td>";
                 echo "<tr>";
             }
+
         ?>
         </tbody>
     </table>

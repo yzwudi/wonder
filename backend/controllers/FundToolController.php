@@ -131,7 +131,14 @@ class FundToolController extends WonderController
     }
 
     public function actionCompositeIndex(){
-        $list = IndexManage::findAll(['date'=>date('Y-m-d', time())]);
+        $date = date('Y-m-d', time());
+        if(isset($_POST['IndexManage']['date'])){
+            $date = $_POST['IndexManage']['date'];
+        }
+        $list = IndexManage::findAll(['date'=>$date]);
+        if(!$list){
+            static::buildError([], 1, '当前日期暂无内容');
+        }
         $model = new IndexManage();
         return $this->render('indexManageIndex', [
             'indexList' => $list,
