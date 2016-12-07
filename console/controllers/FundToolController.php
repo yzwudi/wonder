@@ -9,10 +9,9 @@
 namespace console\controllers;
 
 use backend\models\IndexManage;
-use yii\console\Controller;
 use yii;
 
-class FundToolController extends Controller {
+class FundToolController extends BaseController {
     public function actionGetCompositeIndex(){
         if(IndexManage::findOne(['date' => date('Y-m-d', time())])){
             return self::EXIT_CODE_NORMAL;
