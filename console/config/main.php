@@ -17,33 +17,13 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning', 'info' ,'profile'],
-                ],
-            ],
-        ],
-    ],
-    /*'components' => [
-        'log' => [
-            'flushInterval' => 1,
-            'targets' => [
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning','info','profile'],
                     'logVars' => [],
                     'categories' => ['application.*'],
                     'prefix'  => function ($message) {return "";},
                     'exportInterval' => 1
                 ],
-                [
-                    'class' => 'common\components\LogStashTarget',
-                    'logVars' => [],
-                    'except' => ['yii\db*'],
-                    'levels' => ['error', 'info','warning'],
-                    'logFile' => '@runtime/logs/stash.log',
-                    'prefix' => function ($message) {return "";},
-                    'exportInterval' => 1
-                ]
             ],
         ],
-    ],*/
+    ],
     'params' => $params,
 ];

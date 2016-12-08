@@ -8,7 +8,6 @@
 use dosamigos\datepicker\DatePicker;
 use yii\bootstrap\ActiveForm;
 $this->title = '基金估值';
-
 ?>
 <?php
 
@@ -20,17 +19,29 @@ $form = ActiveForm::begin(['id' => 'login-form']);
         'attribute' => 'date',
         'template' => '{addon}{input}',
         'language' => 'zh-CN',
-        //'placeholder'=>'2015-12-05',
         'clientOptions' => [
             'autoclose' => true,
             'format' => 'yyyy-mm-dd',
             'date'=>'2015-12-05',
-        ]
+            'todayHighlight' => true,
+            'endDate' => date('Y-m-d', time()),
+        ],
+        'options' => [
+            'value' => $date
+        ],
     ]);?>
+    <div class="form-group" style="padding: 10px 0 0 0">
+            <?= \yii\bootstrap\Html::submitButton( '按日期查询' , ['class' => 'btn btn-primary']) ?>
+    </div>
+    <div>
+        <ul class="pagination pagination-sm" style="margin: -8px 0 0 0">
+            <li><a href="/fund-tool/composite-index?date=<?=date('Y-m-d', (strtotime($date)-3600*24))?>">前一天</a></li>
+            <li><a href="/fund-tool/composite-index?date=<?=date('Y-m-d', (strtotime($date)+3600*24))?>">后一天</a></li>
+        </ul>
+    </div>
 </div>
-<div class="form-group">
-    <?= \yii\bootstrap\Html::submitButton( '按日期查询' , ['class' => 'btn btn-primary']) ?>
-</div>
+
+
 
 <?php ActiveForm::end(); ?>
 
@@ -71,3 +82,4 @@ $form = ActiveForm::begin(['id' => 'login-form']);
         </tbody>
     </table>
 </div>
+

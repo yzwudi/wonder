@@ -134,6 +134,11 @@ class FundToolController extends WonderController
         $date = date('Y-m-d', time());
         if(isset($_POST['IndexManage']['date'])){
             $date = $_POST['IndexManage']['date'];
+        }else{
+            $date = self::getParam('date', $date);
+        }
+        if(strtotime($date) > time()){
+            static::buildError([], 1, '查询时间不能大于今日');
         }
         $list = IndexManage::findAll(['date'=>$date]);
         if(!$list){
@@ -143,6 +148,7 @@ class FundToolController extends WonderController
         return $this->render('indexManageIndex', [
             'indexList' => $list,
             'model' => $model,
+            'date' => $date,
         ]);
     }
 }
