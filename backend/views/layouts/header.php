@@ -113,8 +113,8 @@ use yii\helpers\Html;
                             <ul class="menu">
                                 <li>
                                     <a href="#">
-                                        <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                                    </a>
+                                        <i class="fa fa-users text-aqua"></i> 5 new
+                                    </a><a href="#">x</a>
                                 </li>
                                 <li>
                                     <a href="#">
@@ -138,6 +138,15 @@ use yii\helpers\Html;
                                         <i class="fa fa-user text-red"></i> You changed your username
                                     </a>
                                 </li>
+                                <li>
+                                    <a style="float: left;display:block;width: 80%"> <i class="fa fa-user text-red" ></i>5 new </a>
+                                    <button type="button" class="btn btn-default" style="float:right;margin-top: 5px">x</button>
+                                </li>
+                                <li>
+                                    <a style="float: left;display:block;width: 80%"> <i class="fa fa-user text-red" ></i>5 new5 new5 new5 new5 </a>
+                                    <a type="button" class="btn btn-default" style="float:right;margin-top: 5px">x</a>
+                                </li>
+
                             </ul>
                         </li>
                         <li class="footer"><a href="#">View all</a></li>

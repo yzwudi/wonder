@@ -18,6 +18,9 @@ return [
         'admin' => [
             'class' => 'mdm\admin\Module',
         ],
+        'tools'=>[
+            'class'=>'backend\modules\tools\ToolsModule'
+        ],
     ],
     "aliases" => [
         "@mdm/admin" => '@vendor/mdmsoft/yii2-admin',

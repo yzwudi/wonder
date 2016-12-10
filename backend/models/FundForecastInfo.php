@@ -8,13 +8,16 @@ use Yii;
  * This is the model class for table "fund_forecast_info".
  *
  * @property integer $id
- * @property integer $fund_id
+ * @property string $fund_id
  * @property string $name
  * @property double $max_forecast
  * @property double $min_forecast
  * @property double $avg_forecast
  * @property string $month
  * @property string $info
+ * @property double $current_value
+ * @property string $update_date
+ *
  */
 class FundForecastInfo extends \yii\db\ActiveRecord
 {
@@ -33,9 +36,9 @@ class FundForecastInfo extends \yii\db\ActiveRecord
     {
         return [
             [['fund_id', 'name', 'max_forecast', 'min_forecast', 'avg_forecast', 'month'], 'required'],
-            [['fund_id'], 'integer'],
+            [['fund_id', 'update_date'], 'string'],
             [['fund_id'], 'unique'],
-            [['max_forecast', 'min_forecast', 'avg_forecast'], 'number'],
+            [['max_forecast', 'min_forecast', 'avg_forecast', 'current_value'], 'number'],
             [['name'], 'string', 'max' => 64],
             [['month'], 'string', 'max' => 16],
             [['info'], 'string'],
@@ -56,6 +59,8 @@ class FundForecastInfo extends \yii\db\ActiveRecord
             'avg_forecast' => date('m').'预估买卖价',
             'month' => 'Month',
             'info' => '提示',
+            'update_date' => '更新时间',
+            'current_value' => '当前净值',
         ];
     }
 

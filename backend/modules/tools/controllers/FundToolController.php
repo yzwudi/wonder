@@ -6,9 +6,10 @@
  * Time: 21:07
  */
 
-namespace backend\controllers;
+namespace backend\modules\tools\controllers;
 
 use backend\components\FuncHelper;
+use backend\controllers\WonderController;
 use backend\models\FundForecastInfo;
 use backend\models\FundForecastSearch;
 use backend\models\FundTool;
@@ -47,6 +48,14 @@ class FundToolController extends WonderController
                 ]);
             }
             $info = $this->_calculateForecastValue($model->fund_id);
+            if(!$info){
+                return $this->render('fundForecastIndex', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'model' => $model,
+                    'error' => static::buildError([], 1, '暂无数据，无法添加！'),
+                ]);
+            }
             $model->max_forecast = $info['max'];
             $model->min_forecast = $info['min'];
             $model->avg_forecast = $info['avg'];
@@ -72,6 +81,45 @@ class FundToolController extends WonderController
         ]);
     }
 
+    public function actionDelete($id)
+    {
+
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['/fund-tool/add-fund']);
+    }
+
+    protected function findModel($id)
+    {
+        if (($model = FundForecastInfo::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('请求的基金不存在');
+        }
+    }
+
+    public function actionCompositeIndex(){
+        $date = date('Y-m-d');
+        if(isset($_POST['IndexManage']['date'])){
+            $date = $_POST['IndexManage']['date'];
+        }else{
+            $date = self::getParam('date', $date);
+        }
+        if(strtotime($date) > time()){
+            static::buildError([], 1, '查询时间不能大于今日');
+        }
+        $list = IndexManage::findAll(['date'=>$date]);
+        if(!$list){
+            static::buildError([], 1, '当前日期暂无内容');
+        }
+        $model = new IndexManage();
+        return $this->render('indexManageIndex', [
+            'indexList' => $list,
+            'model' => $model,
+            'date' => $date,
+        ]);
+    }
+
     private function _calculateForecastValue($fundId){
         $month = date('m')==1 ? 12 : date('m')-1;
         $year = date('m')==1 ? date('y')-1 : date('y');
@@ -94,7 +142,9 @@ class FundToolController extends WonderController
                 $values[] = $data[1];
             }
         }
-        $str = max($values).'/'.min($values).'/'.round(array_sum($values)/count($values),4);
+        if(!$values){
+            return '';
+        }
         if($values[count($values)-1] > round(array_sum($values)/count($values),4)){
             $keyHeight = 1.02;
             $keyLow = 1;
@@ -111,44 +161,5 @@ class FundToolController extends WonderController
             'info' => $str,
         ];
         return $info;
-    }
-
-    public function actionDelete($id)
-    {
-
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['/fund-tool/add-fund']);
-    }
-
-    protected function findModel($id)
-    {
-        if (($model = FundForecastInfo::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('请求的基金不存在');
-        }
-    }
-
-    public function actionCompositeIndex(){
-        $date = date('Y-m-d', time());
-        if(isset($_POST['IndexManage']['date'])){
-            $date = $_POST['IndexManage']['date'];
-        }else{
-            $date = self::getParam('date', $date);
-        }
-        if(strtotime($date) > time()){
-            static::buildError([], 1, '查询时间不能大于今日');
-        }
-        $list = IndexManage::findAll(['date'=>$date]);
-        if(!$list){
-            static::buildError([], 1, '当前日期暂无内容');
-        }
-        $model = new IndexManage();
-        return $this->render('indexManageIndex', [
-            'indexList' => $list,
-            'model' => $model,
-            'date' => $date,
-        ]);
     }
 }

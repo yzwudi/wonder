@@ -7,7 +7,7 @@
  */
 use dosamigos\datepicker\DatePicker;
 use yii\bootstrap\ActiveForm;
-$this->title = '基金估值';
+$this->title = '大盘指数';
 ?>
 <?php
 
@@ -40,9 +40,6 @@ $form = ActiveForm::begin(['id' => 'login-form']);
         </ul>
     </div>
 </div>
-
-
-
 <?php ActiveForm::end(); ?>
 
 <div class="index-manage-info" style="width:98%">

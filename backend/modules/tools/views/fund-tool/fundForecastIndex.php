@@ -10,7 +10,6 @@ use yii\bootstrap\ActiveForm;
 
 $this->title = '基金估值';
 $this->params['breadcrumbs'][] = $this->title;
-
 ?>
 <div class="fund-forecast-info-index">
 
@@ -34,8 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <form role="form" class="form-group">
                 <div class="form-group">
-                    <input type="text" value="<?=$searchId?>" name="searchId" class="form-control" id="searchId" placeholder="请输入基金ID" autocomplete="off">
-                    <input type="text" value="<?=$searchName?>" name="searchName" class="form-control" id="searchName" placeholder="请输入基金名称" autocomplete="off">
+                    <input type="text" value="<?=isset($searchId)?$searchId:''?>" name="searchId" class="form-control" id="searchId" placeholder="请输入基金ID" autocomplete="off">
+                    <input type="text" value="<?=isset($searchName)?$searchName:''?>" name="searchName" class="form-control" id="searchName" placeholder="请输入基金名称" autocomplete="off">
                 </div>
                 <button type="submit" class="btn btn-primary">查询</button>
             </form>

@@ -27,6 +27,7 @@ class FundToolController extends BaseController {
             $output = str_replace('"', '', $output);
             $output = preg_replace('/\s/',"",$output);
             $output = explode('/', trim(preg_replace('/varzsbx[0-9]+=/', '/', $output), '/'));
+
             array_shift($output);
             $indexes = [];
             foreach($output as $key=>$val){
