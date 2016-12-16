@@ -18,7 +18,7 @@ if(isset($error) && $error){
 ?>
 <div class="content-wrapper">
     <div class="errors" style="padding-top: 5px;display:<?=$dispaly?>">
-        <div class="alert alert-<?=$property?>" >
+        <div class="alert alert-<?=$property?>" style="padding-bottom: 3px;padding-top: 3px">
             <a class="close" data-dismiss="alert">×</a>
             <strong style="font-size: 18px">操作失败! <?=isset($error['msg'])?$error['msg']:''?></strong>
         </div>

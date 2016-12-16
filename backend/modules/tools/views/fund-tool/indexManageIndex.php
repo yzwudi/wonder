@@ -35,8 +35,8 @@ $form = ActiveForm::begin(['id' => 'login-form']);
     </div>
     <div>
         <ul class="pagination pagination-sm" style="margin: -8px 0 0 0">
-            <li><a href="/fund-tool/composite-index?date=<?=date('Y-m-d', (strtotime($date)-3600*24))?>">前一天</a></li>
-            <li><a href="/fund-tool/composite-index?date=<?=date('Y-m-d', (strtotime($date)+3600*24))?>">后一天</a></li>
+            <li><a href="/tools/fund-tool/composite-index?date=<?=date('Y-m-d', (strtotime($date)-3600*24))?>">前一天</a></li>
+            <li><a href="/tools/fund-tool/composite-index?date=<?=date('Y-m-d', (strtotime($date)+3600*24))?>">后一天</a></li>
         </ul>
     </div>
 </div>
