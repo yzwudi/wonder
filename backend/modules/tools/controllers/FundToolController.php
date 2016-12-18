@@ -24,7 +24,7 @@ class FundToolController extends WonderController
         $str = '';
         $info = '';
         if($model->load(Yii::$app->request->post()) && $model->validate()){
-            $info = $this->_calculateForecastValue($model->fund_id);
+            $info = FundForecastInfo::calculateForecastValue($model->fund_id);
         }
         return $this->render('index', ['model'=>$model, 'str'=>$str, 'info'=>$info]);
     }
@@ -34,7 +34,7 @@ class FundToolController extends WonderController
         $searchModel = new FundForecastSearch();
         $searchId = static::getParam('searchId', '');
         $searchName= static::getParam('searchName', '');
-        FundForecastInfo::buildSearch(['fund_id'=>$searchId, 'name'=>$searchName]);
+        FundForecastInfo::buildSearch(['fund_id'=>$searchId, 'name'=>$searchName, 'month'=>date('Ym', time())]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $model = new FundForecastInfo();
         if ($model->load(Yii::$app->request->post())){
@@ -47,7 +47,7 @@ class FundToolController extends WonderController
                     'error' => static::buildError([], 1, '基金号对应基金不存在'),
                 ]);
             }
-            $info = $this->_calculateForecastValue($model->fund_id);
+            $info = FundForecastInfo::calculateForecastValue($model->fund_id);
             if(!$info){
                 return $this->render('fundForecastIndex', [
                     'searchModel' => $searchModel,
@@ -61,8 +61,23 @@ class FundToolController extends WonderController
             $model->avg_forecast = $info['avg'];
             $model->info = $info['info'];
             $model->month = date('Ym', time());
+            $value = FuncHelper::getFundValueAndName($model->fund_id);
+            if(!$value){
+                return $this->render('fundForecastIndex', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'model' => $model,
+                    'error' => static::buildError([], 1, '获取净值失败！'),
+                ]);
+            }
+            $model->current_value = $value;
+            if($value < $model->avg_forecast){
+                $model->info = $model->info.',当前净值低于买卖价'.round(($model->avg_forecast-$value)/$model->avg_forecast*100, 2).'%,可以考虑购买 !';
+            }else{
+                $model->info = $model->info.',当前净值高于买卖价'.round(($value-$model->avg_forecast)/$value*100, 2).'%。';
+            }
             if($model->save()){
-                return $this->redirect(['/fund-tool/add-fund']);
+                return $this->redirect(['/tools/fund-tool/add-fund']);
             }else{
                 return $this->render('fundForecastIndex', [
                     'searchModel' => $searchModel,
@@ -83,10 +98,9 @@ class FundToolController extends WonderController
 
     public function actionDelete($id)
     {
-
         $this->findModel($id)->delete();
 
-        return $this->redirect(['/fund-tool/add-fund']);
+        return $this->redirect(['/tools/fund-tool/add-fund']);
     }
 
     protected function findModel($id)

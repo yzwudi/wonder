@@ -3,6 +3,8 @@ use yii\helpers\Html;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
+$errors = \backend\models\ConsoleErrorLog::find()->select(['info', 'create_time'])->where(['archive'=>0])->orderBy(['create_time'=>SORT_DESC])->asArray()->all();
+$errorsNumber = count($errors);
 ?>
 
 <header class="main-header">
@@ -104,14 +106,22 @@ use yii\helpers\Html;
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
-                        <span class="label label-warning">10</span>
+                        <span class="label label-warning"><?=$errorsNumber?></span>
                     </a>
-                    <ul class="dropdown-menu">
-                        <li class="header">You have 10 notifications</li>
+                    <ul class="dropdown-menu" style="width:350px;">
+                        <li class="header">你有 <?=$errorsNumber?> 条错误消息</li>
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
-                                <li>
+                                <?php
+                                foreach($errors as $key=>$val){
+                                    echo "<li>";
+                                    echo "<a style=\"float: left;display:block;width: 85%\" title='".$val['info'].' '.$val['create_time']."'> <i class=\"fa fa-warning text-red\" ></i>".$val['info'].' '.$val['create_time']."</a>";
+                                    echo "<button type=\"button\" class=\"btn btn-default\" style=\"float:right;margin-top: 5px\">x</button>";
+                                    echo "</li>";
+                                }
+                                ?>
+                                <!--<li>
                                     <a href="#">
                                         <i class="fa fa-users text-aqua"></i> 5 new
                                     </a><a href="#">x</a>
@@ -145,11 +155,11 @@ use yii\helpers\Html;
                                 <li>
                                     <a style="float: left;display:block;width: 80%"> <i class="fa fa-user text-red" ></i>5 new5 new5 new5 new5 </a>
                                     <a type="button" class="btn btn-default" style="float:right;margin-top: 5px">x</a>
-                                </li>
+                                </li>-->
 
                             </ul>
                         </li>
-                        <li class="footer"><a href="#">View all</a></li>
+                        <li class="footer"><a href="#">清除所有</a></li>
                     </ul>
                 </li>
                 <!-- Tasks: style can be found in dropdown.less -->

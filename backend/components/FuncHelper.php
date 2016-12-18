@@ -53,4 +53,25 @@ class FuncHelper
             }
         }
     }
+
+    //获取毫秒数
+    public static function getMicroTime($len = 16) {
+        list($usec, $sec) = explode(" ", microtime());
+        return substr($sec . ((float)$usec * 10e8), 0, $len);
+    }
+
+    public static function getFundValueAndName($id){
+        $microtime = FuncHelper::getMicroTime(13);
+        $url = 'http://hq.sinajs.cn/?_='.$microtime.'/&list=f_'.$id;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        if(preg_match('/\"(.+)\"/', iconv('GB2312', 'UTF-8', $output), $info)){
+            $info = explode(',', $info[1]);
+            return $info[1];
+        }
+        return '';
+    }
 }
