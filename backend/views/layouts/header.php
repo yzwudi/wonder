@@ -3,8 +3,16 @@ use yii\helpers\Html;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
-$errors = \backend\models\ConsoleErrorLog::find()->select(['info', 'create_time'])->where(['archive'=>0])->orderBy(['create_time'=>SORT_DESC])->asArray()->all();
+$errors = \backend\models\ConsoleErrorLog::find()->select(['id', 'info', 'create_time'])->where(['archive'=>0])->orderBy(['create_time'=>SORT_DESC])->asArray()->all();
 $errorsNumber = count($errors);
+$module = \Yii::$app->controller->module->id;
+$controller = \Yii::$app->controller->id;
+$action = \Yii::$app->controller->action->id;
+if($module != 'app-backend'){
+    $currentUrl = "/$module/$controller/$action";
+}else{
+    $currentUrl = "/$controller/$action";
+}
 ?>
 
 <header class="main-header">
@@ -109,15 +117,24 @@ $errorsNumber = count($errors);
                         <span class="label label-warning"><?=$errorsNumber?></span>
                     </a>
                     <ul class="dropdown-menu" style="width:350px;">
-                        <li class="header">你有 <?=$errorsNumber?> 条错误消息</li>
+                        <li class="header">
+                        <?php
+                            if($errorsNumber){
+                                echo "你有 $errorsNumber 条错误消息";
+                            }else{
+                                echo '暂无错误';
+                            }
+                        ?>
+                        </li>
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
                                 <?php
                                 foreach($errors as $key=>$val){
+                                    $id = $val['id'];
                                     echo "<li>";
-                                    echo "<a style=\"float: left;display:block;width: 85%\" title='".$val['info'].' '.$val['create_time']."'> <i class=\"fa fa-warning text-red\" ></i>".$val['info'].' '.$val['create_time']."</a>";
-                                    echo "<button type=\"button\" class=\"btn btn-default\" style=\"float:right;margin-top: 5px\">x</button>";
+                                    echo "<a href=\"/site/clear-notice?currentUrl=$currentUrl&id=$id\" style=\"float: left;display:block;width: 85%\" title='".$val['info'].' '.$val['create_time']."'> <i class=\"fa fa-warning text-red\" ></i>".$val['info'].' '.$val['create_time']."</a>";
+                                    echo "<a href=\"/site/clear-notice?currentUrl=$currentUrl&id=$id\" style=\"float:right\">x</a>";
                                     echo "</li>";
                                 }
                                 ?>
@@ -159,7 +176,7 @@ $errorsNumber = count($errors);
 
                             </ul>
                         </li>
-                        <li class="footer"><a href="#">清除所有</a></li>
+                        <li class="footer"><a href="/site/clear-notice?currentUrl=<?=$currentUrl?>">清除所有</a></li>
                     </ul>
                 </li>
                 <!-- Tasks: style can be found in dropdown.less -->

@@ -1,10 +1,10 @@
 <?php
 namespace backend\controllers;
 
+use backend\models\ConsoleErrorLog;
 use backend\models\FundBestInfo;
 use backend\models\FundDayInfo;
 use Yii;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
@@ -242,5 +242,14 @@ class SiteController extends WonderController
         }
 
         echo '添加成功';
+    }
+
+    public function actionClearNotice($currentUrl, $id=false){
+        $condition = ['archive' => 0];
+        if($id){
+            $condition['id'] = $id;
+        }
+        ConsoleErrorLog::updateAll(['archive'=>1], $condition);
+        $this->redirect($currentUrl);
     }
 }
