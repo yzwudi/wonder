@@ -14,6 +14,7 @@ use backend\models\FundForecastInfo;
 use backend\models\FundForecastSearch;
 use backend\models\FundTool;
 use backend\models\IndexManage;
+use backend\modules\tools\models\FundValueDayData;
 use Yii;
 use yii\web\NotFoundHttpException;
 
@@ -134,8 +135,27 @@ class FundToolController extends WonderController
         ]);
     }
 
-    public function actionForecastDetail(){
-        return $this->render('forecastDetail');
+    public function actionForecastDetail($fund_id){
+        $dayData = FundValueDayData::find()->select(['date', 'value'])
+            ->where(['month'=>date('ym', time()), 'fund_id'=>$fund_id])
+            ->orderBy(['date'=>SORT_ASC])
+            ->asArray()->all();
+        $date = array_column($dayData, 'date');
+        $values = array_column($dayData, 'value');
+        $count = count($values);
+        $fund = FundForecastInfo::findOne(['fund_id'=>$fund_id]);
+        $currentValue = $fund->current_value;
+        $minValue = $fund->min_forecast;
+        $maxValue = $fund->max_forecast;
+        $current = ['当前净值'];
+        $max = ['最大预估净值'];
+        $min = ['最小预估净值'];
+        for($i=0; $i<$count; $i++){
+            $current[] = $currentValue;
+            $max[] = $maxValue;
+            $min[] = $minValue;
+        }
+        return $this->render('forecastDetail', ['date'=>$date, 'values'=>$values, 'current'=>$current, 'max'=>$max, 'min'=>$min]);
     }
 
     private function _calculateForecastValue($fundId){

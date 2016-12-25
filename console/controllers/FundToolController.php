@@ -142,6 +142,7 @@ class FundToolController extends BaseController {
                         return self::EXIT_CODE_ERROR;
                     }
                     $fund->current_value = $value;
+
                     if($fund->month != $month || !FundValueDayData::findOne(['fund_id'=>$fund->fund_id, 'month'=>date('ym', time())])){
                         $info = FundForecastInfo::calculateForecastValue($fund->fund_id, true);
                         if(!$info){
