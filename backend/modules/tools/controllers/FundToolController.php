@@ -47,7 +47,7 @@ class FundToolController extends WonderController
                     'error' => static::buildError([], 1, '基金号对应基金不存在'),
                 ]);
             }
-            $info = FundForecastInfo::calculateForecastValue($model->fund_id);
+            $info = FundForecastInfo::calculateForecastValue($model->fund_id, true);
             if(!$info){
                 return $this->render('fundForecastIndex', [
                     'searchModel' => $searchModel,
@@ -96,7 +96,7 @@ class FundToolController extends WonderController
         ]);
     }
 
-    public function actionDelete($id)
+    public function actionFundForecastDelete($id)
     {
         $this->findModel($id)->delete();
 
@@ -132,6 +132,10 @@ class FundToolController extends WonderController
             'model' => $model,
             'date' => $date,
         ]);
+    }
+
+    public function actionForecastDetail(){
+        return $this->render('forecastDetail');
     }
 
     private function _calculateForecastValue($fundId){

@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use backend\components\FuncHelper;
+use backend\modules\tools\models\FundValueDayData;
 use Yii;
 
 /**
@@ -79,7 +80,7 @@ class FundForecastInfo extends \yii\db\ActiveRecord
         }
     }
 
-    public static function calculateForecastValue($fundId){
+    public static function calculateForecastValue($fundId, $save=false){
         $month = date('m')==1 ? 12 : date('m')-1;
         $year = date('m')==1 ? date('y')-1 : date('y');
         $dayNum = cal_days_in_month(CAL_GREGORIAN, $month, $year);
@@ -96,15 +97,30 @@ class FundForecastInfo extends \yii\db\ActiveRecord
         $str = preg_replace('/",records.+/', '', $str);
         $datas = FuncHelper::getArrayFromHtmlTable($str);
         $values = [];
+        $insertData = [];
+        $currentMonth = date('ym', time());
         foreach($datas as $data){
-            if(!empty($data) && isset($data[1])){
+            if(!empty($data) && isset($data[1]) && isset($data[0])){
                 $values[] = $data[1];
+                $insertData[] = [$fundId, $data[0], $data[1], $currentMonth];
             }
         }
-
-        if(!$values){
-            return '';
+        if(!$values || !$insertData){
+            return false;
         }
+
+        if($save && !FundValueDayData::findOne(['fund_id'=>$fundId, 'month'=>$currentMonth])){
+            $tran = Yii::$app->db->beginTransaction();
+            $params = ['fund_id', 'date', 'value', 'month'];
+            $connection = Yii::$app->db;
+            $row = $connection->createCommand()->batchinsert(FundValueDayData::tableName(),$params,$insertData)->execute();
+            if($row <= 0){
+                $tran->rollBack();
+                return false;
+            }
+            $tran->commit();
+        }
+
         if($values[count($values)-1] > round(array_sum($values)/count($values),4)){
             $keyHeight = 1.02;
             $keyLow = 1;

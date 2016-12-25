@@ -12,6 +12,7 @@ use backend\components\FuncHelper;
 use backend\models\ConsoleErrorLog;
 use backend\models\FundForecastInfo;
 use backend\models\IndexManage;
+use backend\modules\tools\models\FundValueDayData;
 use yii;
 
 class FundToolController extends BaseController {
@@ -141,8 +142,8 @@ class FundToolController extends BaseController {
                         return self::EXIT_CODE_ERROR;
                     }
                     $fund->current_value = $value;
-                    if($fund->month != $month){
-                        $info = FundForecastInfo::calculateForecastValue($fund->fund_id);
+                    if($fund->month != $month || !FundValueDayData::findOne(['fund_id'=>$fund->fund_id, 'month'=>date('ym', time())])){
+                        $info = FundForecastInfo::calculateForecastValue($fund->fund_id, true);
                         if(!$info){
                             \Yii::error("基金$fund->fund_id 获取信息失败！id为$fund->id;", "application.Tools.Get.Forecast.Info");
                             return self::EXIT_CODE_ERROR;

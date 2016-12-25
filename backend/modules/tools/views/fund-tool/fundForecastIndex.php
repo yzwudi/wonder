@@ -47,8 +47,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        //['class' => \yii\grid\CheckboxColumn::className()],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
             //'id',
             'fund_id',
@@ -59,7 +60,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'current_value',
             'info',
 
-            ['class' => 'yii\grid\ActionColumn', 'template' => '{view}  {delete}'],
+            //['class' => 'yii\grid\ActionColumn', 'template' => '{view}  {delete}'],
+            [
+                'class'      => 'yii\grid\ActionColumn',
+                'template' => '{view}  {delete}',
+                'header'     => '<a>操作</a>',
+                'buttons'    => [],
+
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    switch($action)
+                    {
+                        case 'view':
+                            return '/tools/fund-tool/forecast-detail?fund_id=' . $model->fund_id;
+                            break;
+                        case 'delete':
+                            return '/tools/fund-tool/fund-forecast-delete?id=' . $model->id;
+                            break;
+                    }
+
+                },
+            ]
         ],
     ]); ?>
 </div>
