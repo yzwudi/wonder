@@ -6,7 +6,8 @@
  * Time: 16:26
  */
 $this->title = '基金估值详情';
-//array_unshift($date, 'x');
+$this->params['breadcrumbs'][] = ['label' => '估值管理', 'url' => ['add-fund']];
+$this->params['breadcrumbs'][] = $this->title;
 array_unshift($values, '上月走势');
 $this->registerJs(
     "var columns = ". json_encode([
@@ -27,7 +28,7 @@ $this->registerJsFile('/static/script/modules/tools/forecastDetail.js');
 ?>
 
 
-<div id='chart' style="width:95%"></div>
+<div id='chart' style="width:95%;margin-top: 10px"></div>
 
 
 
