@@ -76,7 +76,7 @@ class SiteController extends WonderController
     public function actionIndex()
     {
         $fileName = 'uploads/'.date('Ymd', time()).'.txt';
-        if(!file_exists($fileName) && date('w') == 0){
+        if(!file_exists($fileName)/* && date('w') == 0*/){
             $this->_saveFundDayInfo($fileName);
         }
         return $this->render('index');
